@@ -8,3 +8,5 @@ data-analysis/.idea
 ehthumbs.db
 Thumbs.db
 research
+*.pyc
+__pycache__

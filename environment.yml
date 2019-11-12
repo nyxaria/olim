@@ -1,0 +1,20 @@
+name: olim
+
+channels:
+  - bokeh
+  - conda-forge
+
+dependencies:
+  - python=3.7
+  - numpy
+  - notebook
+  - bokeh>=1.4
+  - matplotlib
+  - pandas
+  - scipy
+  - selenium
+  - datashader
+  - networkx
+  - flask
+  - phantomjs
+  - holoviews

@@ -59,9 +59,11 @@ class Process:
                     child.disabled = key not in _analyser.data["explore"]
             else:
                 _analyser.data[val['owner'].layout.grid_area] = val['new']
-
             display(_analyser.gui)
-
+            for i in range(1):
+                import time
+                time.sleep(1)
+                # display(self.component.title("hi %i" % i))
             _analyser.explore_wire_diameter(self.coil, self.tube,
                                             params=list(_analyser.data["explore"]),
                                             units=_analyser.units,
@@ -137,7 +139,7 @@ class Process:
             def on_click_cb(b):
                 self.coil.layer_count = None
                 self.explore_actuator_force()
-
+                return
             display(b)
             b.on_click(on_click_cb)
 
@@ -152,7 +154,6 @@ class Process:
                 pass
             else:
                 _analyser.data[val['owner'].layout.grid_area] = val['new']
-
             display(_analyser.gui)
 
             _analyser.explore_actuator_force(self.coil, self.tube, self._units,
