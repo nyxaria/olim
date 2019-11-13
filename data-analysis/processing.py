@@ -5,7 +5,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
-from bokeh.models import Legend, HoverTool
+from bokeh.models import Legend, HoverTool, WheelZoomTool
 from bokeh.plotting import figure, show, reset_output, ColumnDataSource
 from bokeh.io import output_notebook
 
@@ -232,7 +232,7 @@ class Analyser:
                 legend_items.append((legend[i] if legend else _id_key, [line]))
                 i += 1
             i -= 1
-
+        p.toolbar.active_scroll = p.select_one(WheelZoomTool)
         _legend = Legend(items=legend_items)
         p.add_layout(_legend, 'right')
         p.title.align = 'center'
