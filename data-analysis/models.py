@@ -78,6 +78,7 @@ class Coil:
         self.wire_area = None
         self.layer_count = None
         self.layer_height = None
+        self.turns = None
         self.mag_Br = mag_Br
 
     def set_wire_d(self, wire_d, unit="mm"):
@@ -135,6 +136,15 @@ class Coil:
             length += (tube.effective_length / wire_d) * math.pi * (tube.OD + wire_d * (layer - 0.5))
         return scale(length, unit=unit[:-1])
 
+    def get_number_of_turns(self, tube, layer_count=0, wire_d=None):
+        if layer_count == 0 and self.layer_count:
+            layer_count = self.layer_count
+        if self.wire_d:
+            wire_d = self.wire_d
+        elif not wire_d and not self.wire_d:
+            raise ValueError("wire_d not set!")
+        return layer_count * tube.effective_length / wire_d
+        
     def get_coil_mass(self, tube, layer_count=0, wire_d=None, unit='g'):
         return scale(8940000 * self.get_wire_area(wire_d=wire_d) * self.get_coil_length(tube, layer_count=layer_count,
                                                                                         wire_d=wire_d), unit=unit[:-1])

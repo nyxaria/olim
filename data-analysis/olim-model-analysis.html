@@ -13175,7 +13175,7 @@ div#notebook {
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tube</span> <span class="o">=</span> <span class="n">Tube</span><span class="p">(</span><span class="n">OD</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">ID</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">effective_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;mm&quot;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">tube</span> <span class="o">=</span> <span class="n">Tube</span><span class="p">(</span><span class="n">ID</span><span class="o">=</span><span class="mi">21</span><span class="p">,</span> <span class="n">OD</span><span class="o">=</span><span class="mi">23</span><span class="p">,</span> <span class="n">effective_length</span><span class="o">=</span><span class="mi">150</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;mm&quot;</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13252,7 +13252,7 @@ div#notebook {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">coil</span><span class="o">.</span><span class="n">set_wire_d</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;mm&quot;</span><span class="p">)</span> 
-<span class="n">coil</span><span class="o">.</span><span class="n">set_layer_count</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>  <span class="c1"># comment if you want to explore graph</span>
+<span class="n">coil</span><span class="o">.</span><span class="n">set_layer_count</span><span class="p">(</span><span class="mi">14</span><span class="p">)</span>  <span class="c1"># comment if you want to explore graph</span>
 <span class="n">coil</span><span class="o">.</span><span class="n">mag_Br</span> <span class="o">=</span> <span class="mf">1.5</span>  <span class="c1">#  N42 neodynium magnet</span>
 </pre></div>
 
@@ -13337,7 +13337,8 @@ we can explore force against extension of plunger and layer height</p>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">I</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">coil</span><span class="o">.</span><span class="n">get_current</span><span class="p">(</span><span class="n">tube</span><span class="p">),</span> <span class="n">coil</span><span class="o">.</span><span class="n">get_resistance</span><span class="p">(</span><span class="n">tube</span><span class="p">);</span> <span class="n">V</span> <span class="o">=</span> <span class="n">I</span> <span class="o">*</span> <span class="n">R</span>
-<span class="n">p</span><span class="o">.</span><span class="n">out</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;V=</span><span class="si">%0.2f</span><span class="s2">V </span><span class="se">\n</span><span class="s2">&quot;</span>
+<span class="n">p</span><span class="o">.</span><span class="n">out</span><span class="p">(</span><span class="sa">u</span><span class="s2">&quot;Max Parameters:</span><span class="se">\n</span><span class="s2">&quot;</span>
+       <span class="s2">&quot;V=</span><span class="si">%0.2f</span><span class="s2">V </span><span class="se">\n</span><span class="s2">&quot;</span>
        <span class="s2">&quot;I=</span><span class="si">%0.2f</span><span class="s2">A </span><span class="se">\n</span><span class="s2">&quot;</span>
        <span class="s2">&quot;R=</span><span class="si">%0.2f</span><span class="se">\u2126</span><span class="s2"> </span><span class="se">\n</span><span class="s2">&quot;</span>
        <span class="s2">&quot;P=</span><span class="si">%0.2f</span><span class="s2">W&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">V</span><span class="o">*</span><span class="n">I</span><span class="p">))</span>
@@ -13364,12 +13365,14 @@ we can explore force against extension of plunger and layer height</p>
 
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wire_d</span><span class="p">,</span> <span class="n">coil_m</span><span class="p">,</span> <span class="n">coil_L</span> <span class="o">=</span> <span class="n">coil</span><span class="o">.</span><span class="n">get_wire_d</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">),</span> \
-                         <span class="n">coil</span><span class="o">.</span><span class="n">get_coil_mass</span><span class="p">(</span><span class="n">tube</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">),</span> \
-                         <span class="n">coil</span><span class="o">.</span><span class="n">get_coil_length</span><span class="p">(</span><span class="n">tube</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wire_d</span><span class="p">,</span> <span class="n">coil_m</span><span class="p">,</span> <span class="n">coil_L</span><span class="p">,</span> <span class="n">N_turns</span> <span class="o">=</span> <span class="n">coil</span><span class="o">.</span><span class="n">get_wire_d</span><span class="p">(</span><span class="n">unit</span><span class="o">=</span><span class="s1">&#39;mm&#39;</span><span class="p">),</span> \
+                                  <span class="n">coil</span><span class="o">.</span><span class="n">get_coil_mass</span><span class="p">(</span><span class="n">tube</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;kg&#39;</span><span class="p">),</span> \
+                                  <span class="n">coil</span><span class="o">.</span><span class="n">get_coil_length</span><span class="p">(</span><span class="n">tube</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;m&#39;</span><span class="p">),</span> \
+                                  <span class="n">coil</span><span class="o">.</span><span class="n">get_number_of_turns</span><span class="p">(</span><span class="n">tube</span><span class="p">)</span>
 <span class="n">p</span><span class="o">.</span><span class="n">out</span><span class="p">(</span><span class="s2">&quot;wire diameter=</span><span class="si">%.2f</span><span class="s2">mm </span><span class="se">\n</span><span class="s2">&quot;</span>
       <span class="s2">&quot;coil mass=</span><span class="si">%.2f</span><span class="s2">kg </span><span class="se">\n</span><span class="s2">&quot;</span>
-      <span class="s2">&quot;coil length=</span><span class="si">%.1f</span><span class="s2">m&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">wire_d</span><span class="p">,</span> <span class="n">coil_m</span><span class="p">,</span> <span class="n">coil_L</span><span class="p">))</span>
+      <span class="s2">&quot;coil length=</span><span class="si">%.1f</span><span class="s2">m </span><span class="se">\n</span><span class="s2">&quot;</span>
+      <span class="s2">&quot;number of turns=</span><span class="si">%.0f</span><span class="s2">&quot;</span><span class="o">%</span> <span class="p">(</span><span class="n">wire_d</span><span class="p">,</span> <span class="n">coil_m</span><span class="p">,</span> <span class="n">coil_L</span><span class="p">,</span> <span class="n">N_turns</span><span class="p">))</span>
 </pre></div>
 
     </div>
