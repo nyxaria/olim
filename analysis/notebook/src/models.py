@@ -77,7 +77,7 @@ class Coil:
         self.current = None
         self.wire_area = None
         self.layer_count = None
-        self.layer_height = None
+        self.coil_height = None
         self.turns = None
         self.mag_Br = mag_Br
 
@@ -115,14 +115,23 @@ class Coil:
             self.coil_height = scale(self.layer_count, unit[:-1])
 
     def get_coil_height(self, _layer_count=None, unit='m'):
-        if self.layer_height:
-            return scale(self.layer_height, unit[:-1])
+        if self.coil_height:
+            return scale(self.coil_height, unit[:-1])
         else:
             if _layer_count:
                 return scale(_layer_count * self.wire_d, unit[:-1])
             elif self.layer_count:
                 return scale(self.layer_count * self.wire_d, unit[:-1])
         return None
+
+    def get_coil_OD(self, tube, _layer_count=None, unit='m'):
+        return self.get_coil_height(_layer_count, unit=unit)*2 + tube.OD
+
+    def get_coil_avg_D(self, tube, _layer_count=None, unit='m'):
+        return self.get_coil_height(_layer_count, unit=unit) + tube.OD
+
+    def get_coil_ID(self, tube, _layer_count=None, unit='m'):
+        return scale(tube.OD, unit[:-1])
 
     def get_coil_length(self, tube, layer_count=0, wire_d=None, unit='m'):
         if layer_count == 0 and self.layer_count:

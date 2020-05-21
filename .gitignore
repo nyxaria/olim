@@ -2,6 +2,7 @@ vlogs
 .DS_Store
 .DS_Store?
 ._*
+.idea
 data-analysis/.idea
 analysis/femm/renders
 .Spotlight-V100
