@@ -101,7 +101,7 @@ class Coil:
         if self.wire_d and count:
             self.coil_height = count * self.wire_d
 
-    def set_coil_height(self, height, unit="mm"):
+    def set_height(self, height, unit="mm"):
         if not (unit == 'mm' or unit == 'm'):
             print('Invalid unit "%s". Assigning "mm" for now.' % unit)
             unit = 'mm'
@@ -114,7 +114,7 @@ class Coil:
             self.layer_count = scale(self.layer_count, unit[:-1])
             self.coil_height = scale(self.layer_count, unit[:-1])
 
-    def get_coil_height(self, _layer_count=None, unit='m'):
+    def get_height(self, _layer_count=None, unit='m'):
         if self.coil_height:
             return scale(self.coil_height, unit[:-1])
         else:
@@ -124,16 +124,16 @@ class Coil:
                 return scale(self.layer_count * self.wire_d, unit[:-1])
         return None
 
-    def get_coil_OD(self, tube, _layer_count=None, unit='m'):
+    def get_OD(self, tube, _layer_count=None, unit='m'):
         return self.get_coil_height(_layer_count, unit=unit)*2 + tube.OD
 
-    def get_coil_avg_D(self, tube, _layer_count=None, unit='m'):
+    def get_avg_D(self, tube, _layer_count=None, unit='m'):
         return self.get_coil_height(_layer_count, unit=unit) + tube.OD
 
     def get_coil_ID(self, tube, _layer_count=None, unit='m'):
         return scale(tube.OD, unit[:-1])
 
-    def get_coil_length(self, tube, layer_count=0, wire_d=None, unit='m'):
+    def get_length(self, tube, layer_count=0, wire_d=None, unit='m'):
         if layer_count == 0 and self.layer_count:
             layer_count = self.layer_count
         if self.wire_d:
@@ -154,7 +154,7 @@ class Coil:
             raise ValueError("wire_d not set!")
         return layer_count * tube.effective_length / wire_d
 
-    def get_coil_mass(self, tube, layer_count=0, wire_d=None, unit='g'):
+    def get_mass(self, tube, layer_count=0, wire_d=None, unit='g'):
         return scale(8940000 * self.get_wire_area(wire_d=wire_d) * self.get_coil_length(tube, layer_count=layer_count,
                                                                                         wire_d=wire_d), unit=unit[:-1])
 
