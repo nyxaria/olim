@@ -3,10 +3,12 @@ vlogs
 .DS_Store?
 ._*
 data-analysis/.idea
+analysis/femm/renders
 .Spotlight-V100
 .Trashes
 ehthumbs.db
 Thumbs.db
 research
 *.pyc
+*.ans
 __pycache__

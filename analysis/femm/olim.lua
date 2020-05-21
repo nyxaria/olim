@@ -28,8 +28,10 @@
 -- Model Name
 ModelName = 'olim';
 
+-- Minimum extension from zero/home position
+Xmin = 58
 -- Maximum extension from zero/home position
-Xlim = 150;
+Xmax = 185;
 
 -- Movement increments used during the analysis
 dX = 1;
@@ -38,7 +40,7 @@ dX = 1;
 -- Analysis Routines
 --------------------------------------
 
--- Analyze BL and incremental inductance at 1 mm steps between - Xlim and + Xlim
+-- Analyze BL and incremental inductance at 1 mm steps between Xmin and Xmax
 open(ModelName .. ".FEM");
 mi_saveas('temp.fem');
 
@@ -57,16 +59,24 @@ print('');
 print('---------------------------------------------');
 print('');
 print('Disp(mm)','BL(N/A)');
-for k=0, Xlim, dX do
-    mi_modifycircprop('Coil',1,1);
+
+-- Move to Xmin
+-- mi_selectgroup(1);
+-- mi_movetranslate(0, -Xmin);
+
+for k=Xmin, Xmax, dX do
+    mi_modifycircprop('Coil',1,10);
     mi_analyze(1);
     mi_loadsolution();
     mo_zoom(0,-238,190,97);
     mo_showdensityplot(1,0,1.5,0.005,"mag");
+    mo_showcontourplot(19, -0.000356109087132643, 0, "both");
     -- mo_hidecontourplot()
     mo_hidepoints();
-    mo_savebitmap(root .. "/" .. "render_x=" .. k .. ".png");
-      mo_groupselectblock(2);
+    mo_savebitmap(root .. "/" .. "render_smooth_x=" .. k .. ".jpg");
+    mo_smooth("off")
+    mo_savebitmap(root .. "/" .. "render_x=" .. k .. ".jpg");
+    mo_groupselectblock(2);
     fz = mo_blockintegral(12);
     mo_close();
     -- print(fz)

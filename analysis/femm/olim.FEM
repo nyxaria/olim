@@ -29,7 +29,7 @@
     <innerangle> = 0
     <outerangle> = 0
   <EndBdry>
-[BlockProps]  = 5
+[BlockProps]  = 6
   <BeginBlock>
     <BlockName> = "Air"
     <Mu_x> = 1
@@ -115,6 +115,25 @@
     <J_re> = 0
     <J_im> = 0
     <Sigma> = 24.59
+    <d_lam> = 0
+    <Phi_h> = 0
+    <Phi_hx> = 0
+    <Phi_hy> = 0
+    <LamType> = 0
+    <LamFill> = 1
+    <NStrands> = 0
+    <WireD> = 0
+    <BHPoints> = 0
+  <EndBlock>
+  <BeginBlock>
+    <BlockName> = "N30"
+    <Mu_x> = 1.05
+    <Mu_y> = 1.05
+    <H_c> = 836420
+    <H_cAngle> = 0
+    <J_re> = 0
+    <J_im> = 0
+    <Sigma> = 0.66700000000000004
     <d_lam> = 0
     <Phi_h> = 0
     <Phi_hx> = 0

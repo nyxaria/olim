@@ -117,7 +117,7 @@ class Process:
                                             ".. .. .. .."
                                             "wire_title .. .. .."
                                             "wire_d_range wire_d_range wire_d_range wire_d_range"
-                                            ".. .. .. .."       
+                                            ".. .. .. .."
                                             "coil_title .. .. .."
                                             "coil_layer_height coil_layer_height coil_layer_height coil_layer_height"
                                             ".. .. .. .."
@@ -340,7 +340,7 @@ class Analyser:
         legend_items = []
         for i, layer_count in enumerate(sorted(list(data["coil_layers"].keys()), reverse=True)):
             legend_items.append("%s layers (%.2fmm height)" %
-                                (layer_count, coil.get_layer_height(_layer_count=int(float(layer_count)) * 1000)))
+                                (layer_count, coil.get_coil_height(_layer_count=int(float(layer_count)) * 1000)))
 
         self.generic_explore(df=pd.DataFrame(data),
                              x="extension", y=["force"], identifier="coil_layers",

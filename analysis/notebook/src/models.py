@@ -114,7 +114,7 @@ class Coil:
             self.layer_count = scale(self.layer_count, unit[:-1])
             self.coil_height = scale(self.layer_count, unit[:-1])
 
-    def get_layer_height(self, _layer_count=None, unit='m'):
+    def get_coil_height(self, _layer_count=None, unit='m'):
         if self.layer_height:
             return scale(self.layer_height, unit[:-1])
         else:
@@ -144,7 +144,7 @@ class Coil:
         elif not wire_d and not self.wire_d:
             raise ValueError("wire_d not set!")
         return layer_count * tube.effective_length / wire_d
-        
+
     def get_coil_mass(self, tube, layer_count=0, wire_d=None, unit='g'):
         return scale(8940000 * self.get_wire_area(wire_d=wire_d) * self.get_coil_length(tube, layer_count=layer_count,
                                                                                         wire_d=wire_d), unit=unit[:-1])
