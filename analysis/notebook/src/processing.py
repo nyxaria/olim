@@ -25,12 +25,15 @@ def rreplace(s, old, new, occurrence=1):
 class Process:
     def __init__(self, coil, tube):
         self.coil = coil
+        coil.tube = tube
         self.tube = tube
+        tube.coil = coil
         self.component = Component()
 
         self._units = {
             'wire diameter': 'm',
             'length': 'm',
+            'volume': u"m\u00B3",
             'mass': 'g',
             'resistance': u"\u2126",
             'current': 'A',
@@ -42,7 +45,7 @@ class Process:
             'layers': ''}
 
     def explore_wire_diameter(self, debug=False, resolution=0.01):
-        options = ['resistance', 'length', 'mass', 'current', 'voltage', 'power']
+        options = ['resistance', 'length', 'mass', 'volume', 'current', 'voltage', 'power']
 
         _analyser = Analyser()
         _analyser.units = self._units
@@ -94,7 +97,7 @@ class Process:
                                        layout=unit_layout,
                                        template_columns='100%',
                                        template_rows=template_rows,
-                                       width="50px")
+                                       width="55px")
 
         children = [unit_gui,
                     self.component.multi_select(create_graph, _analyser, options=options,
@@ -103,11 +106,11 @@ class Process:
                     self.component.title('Wire Diameter (mm)', name='wire_title'),
                     self.component.range_slider(create_graph, _analyser,
                                                 description="Range", variable="wire_d_range",
-                                                range=(0.1, 1), step=resolution, max=2,
+                                                range=(0.2, 1.2), step=resolution, max=2,
                                                 readout_format='.{}f'.format(str(resolution).count("0"))),
                     self.component.title('Coil Height (mm)', name='coil_title'),
                     self.component.slider(create_graph, _analyser,
-                                          description="Value", variable="coil_layer_height", increment=14)]
+                                          description="Value", variable="coil_layer_height", increment=1)]
 
         _analyser.gui = self.component.pack(children=children,
                                             layout=
@@ -123,19 +126,19 @@ class Process:
                                             ".. .. .. .."
                                             ''',
                                             template_columns='30% 12.5% 12.5% 45%',
-                                            width='600px')
+                                            width='650px')
 
         create_graph(None)  # trigger update
 
     def explore_actuator_force(self):
         _analyser = Analyser()
-        if self.coil.layer_count:
+        if self.coil.get_layer_count():
             display(self.component.title('Coil Layers set to %i. Please unset this if you wish to explore.'
                                          % self.coil.layer_count))
             b = self.component.button('Unset Coil Layers')
 
             def on_click_cb(b):
-                self.coil.layer_count = None
+                self.coil.set_layer_count(None)
                 self.explore_actuator_force()
                 return
             display(b)
@@ -207,15 +210,16 @@ class Analyser:
 
                 if "layers" in list(df[identifier][_id_key].keys()):
                     source.data['layers'] = df[identifier][_id_key]["layers"]
-
                 line = p.line(x, _y, line_width=2, source=source,
                               color=self.tableau20[i])
                 y_unit = " (%s)" % _units.get(_y, "") if _units.get(_y, "") != "" else ""
 
                 if i == 0:
-                    accuracy = "{1.111}" if _units.get(x, "") == "m" else "{1.11}"  # TODO generalize this and tooltips
-                    tips = [(_y.capitalize() + y_unit, "@%s" % _y + "{1.11}"),
-                            (x.capitalize() + " (%s)" % _units.get(x, ""), "@%s" % x + accuracy)]
+                    accuracy_x = "{1.111}" if _units.get(x, "") == "mm" else "{1.111}"  # TODO generalize this and tooltips
+                    accuracy_y = "{1.111}" if _y == "length" else "{1.111}"  # TODO generalize this and tooltips
+
+                    tips = [(_y.capitalize() + y_unit, "@%s" % _y + "{1.111}"),
+                            (x.capitalize() + " (%s)" % _units.get(x, ""), "@%s" % x + accuracy_x)]
                     if "layers" in list(df[identifier][_id_key].keys()):
                         tips += [("Layers", "@layers")]
 
@@ -224,7 +228,7 @@ class Analyser:
                                           mode='vline'))
                 else:
                     p.add_tools(HoverTool(renderers=[line],
-                                          tooltips=[(_y.capitalize() + y_unit, "@%s" % _y + "{1.11}")],
+                                          tooltips=[(_y.capitalize() + y_unit, "@%s" % _y + "{1.111}")],
                                           mode='vline'))
 
                 legend_items.append((legend[i] if legend else _id_key, [line]))
@@ -258,38 +262,42 @@ class Analyser:
         for wire_d in wire_dias:
             data["coil_height"][count]["wire_d"].append(wire_d * 1000)
             layer_count = int((_coil_layer_height / wire_d) + 0.5)
-            data["coil_height"][count]["layers"].append(scale(layer_count, unit=units["layers"]))
+            data["coil_height"][count]["layers"].append(scale(layer_count, units["layers"]))
             i += 1
             if(i % 100 == 0):
                 i = 0
 
             for param in params:
                 if param == "length":
-                    data["coil_height"][count][param].append(scale(coil.get_coil_length(tube, wire_d=wire_d,
+                    data["coil_height"][count][param].append(scale(coil.get_wire_length(_wire_d=wire_d,
                                                                                         layer_count=layer_count),
-                                                                   unit=units[param][:-1], inverse=True))
+                                                                   units[param]))
+                if param == "volume":
+                    data["coil_height"][count][param].append(coil.get_volume(_wire_d=wire_d,
+                                                                                   layer_count=layer_count,
+                                                                                   unit=units[param]))
                 if param == "mass":
-                    data["coil_height"][count][param].append(scale(coil.get_coil_mass(tube, wire_d=wire_d,
-                                                                                      layer_count=layer_count),
-                                                                   unit=units[param][:-1], inverse=True))
+                    data["coil_height"][count][param].append(scale(coil.get_mass(_wire_d=wire_d,
+                                                                                 layer_count=layer_count),
+                                                                   units[param]))
                 elif param == "resistance":
-                    data["coil_height"][count][param].append(scale(coil.get_resistance(tube, wire_d=wire_d,
+                    data["coil_height"][count][param].append(scale(coil.get_resistance(_wire_d=wire_d,
                                                                                        layer_count=layer_count),
-                                                                   unit=units[param][:-1], inverse=True))
+                                                                   units[param]))
                 elif param == "current":
-                    data["coil_height"][count][param].append(scale(coil.get_max_current(tube, wire_d=wire_d),
-                                                                   unit=units[param][:-1], inverse=True))
+                    data["coil_height"][count][param].append(scale(coil.get_max_current(_wire_d=wire_d),
+                                                                   units[param]))
                 elif param == "voltage":
-                    data["coil_height"][count][param].append(scale(coil.get_max_current(tube, wire_d=wire_d) *
-                                                                   coil.get_resistance(tube, wire_d=wire_d,
+                    data["coil_height"][count][param].append(scale(coil.get_max_current(_wire_d=wire_d) *
+                                                                   coil.get_resistance(_wire_d=wire_d,
                                                                                        layer_count=layer_count),
-                                                                   unit=units[param][:-1], inverse=True))
+                                                                   units[param]))
                 elif param == "power":
-                    data["coil_height"][count][param].append(scale(coil.get_max_current(tube, wire_d=wire_d) *
-                                                                   coil.get_max_current(tube, wire_d=wire_d) *
-                                                                   coil.get_resistance(tube, wire_d=wire_d,
+                    data["coil_height"][count][param].append(scale(coil.get_max_current(_wire_d=wire_d) *
+                                                                   coil.get_max_current(_wire_d=wire_d) *
+                                                                   coil.get_resistance(_wire_d=wire_d,
                                                                                        layer_count=layer_count),
-                                                                   unit=units[param][:-1], inverse=True))
+                                                                   units[param]))
                 if i % 100 == 0 and debug:
                     print("wire_d=%.2fmm" % (wire_d * 1000), "layer_count=%.2f" % layer_count,
                           "%s=%.2f" % (param, data["coil_height"][count][param][-1]))
@@ -333,14 +341,18 @@ class Analyser:
             count = str(count)
             data["coil_layers"][count] = {"force": [], "extension": []}
             for z in extension:
-                F = coil.calculate_force_between_plunger_and_coil(tube, z=z, coil_layers=int(float(count)), Bmag=1.22)
+                F = coil.calculate_force_between_plunger_and_coil(  z=z, coil_layers=int(float(count)), Bmag=1.22)
+                if F == 0:
+                    if coil.get_wire_d() == None:
+                        print("coil.wire_d is not set!")
+                        return
                 data["coil_layers"][count]["force"].append(F)
                 data["coil_layers"][count]["extension"].append(z)
 
         legend_items = []
         for i, layer_count in enumerate(sorted(list(data["coil_layers"].keys()), reverse=True)):
             legend_items.append("%s layers (%.2fmm height)" %
-                                (layer_count, coil.get_coil_height(_layer_count=int(float(layer_count)) * 1000)))
+                                (layer_count, coil.get_height(_layer_count=int(float(layer_count)) * 1000)))
 
         self.generic_explore(df=pd.DataFrame(data),
                              x="extension", y=["force"], identifier="coil_layers",

@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="0c20405d-440e-48eb-82f9-0bfd2cb98539" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/femm/olim.FEM" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/femm/olim.FEM" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/notebook/olim-model-analysis.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/notebook/olim-model-analysis.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/analysis/notebook/src/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/notebook/src/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analysis/notebook/src/processing.py" beforeDir="false" afterPath="$PROJECT_DIR$/analysis/notebook/src/processing.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,5 +38,11 @@
       <updated>1590054973111</updated>
     </task>
     <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="482" y="99" key="refactoring.ChangeSignatureDialog" timestamp="1590057945823">
+      <screen x="0" y="23" width="1440" height="877" />
+    </state>
+    <state x="482" y="99" key="refactoring.ChangeSignatureDialog/0.23.1440.877@0.23.1440.877" timestamp="1590057945823" />
   </component>
 </project>
