@@ -116,7 +116,7 @@ class Coil:
             unit = 'mm'
 
         if unit != 'm':
-            self._wire_d = scale(wire_d, to=unit)
+            self._wire_d = scale(wire_d, _from=unit, to='m')
         self._max_current = self.max_current_per_m2 * self.get_wire_area()
 
     def set_current(self, current):
@@ -288,17 +288,16 @@ class Coil:
             _coil_layers = self._layer_count
 
         _coil_height = _coil_layers * self.get_wire_d()
+
         L = self.get_length()
         D = self.get_ID()
         d = D + _coil_height
         N = self.get_length() * _coil_layers / self.get_wire_d()
-
         if self.get_current():
             I = self.get_current()
         else:
             I = self.get_max_current()
 
-        # print(coil_height, L, D, d, N, I)
         b_z = ((mu * N * I / (2 * L * (D - d))) * (L + (2 * z)) * \
                math.log((D + math.sqrt(D * D + pow(L + 2 * z, 2))) /
                         (d + math.sqrt(d * d + pow(L + 2 * z, 2)))),
@@ -325,6 +324,5 @@ class Coil:
         d = self.tube.ID
         A = math.pi * pow(d / 2 + (self.tube.OD - self.tube.ID) / 2, 2)
         mu = 4.0 * math.pi * pow(10, -7)
-
         f_z = (Bsol_z[0] - abs(Bsol_z[1])) * Bmag * A / mu
         return f_z

@@ -110,7 +110,7 @@ class Process:
                                                 readout_format='.{}f'.format(str(resolution).count("0"))),
                     self.component.title('Coil Height (mm)', name='coil_title'),
                     self.component.slider(create_graph, _analyser,
-                                          description="Value", variable="coil_layer_height", increment=1)]
+                                          description="Value", variable="coil_layer_height", increment=14)] # increment = start value
 
         _analyser.gui = self.component.pack(children=children,
                                             layout=
